@@ -4,7 +4,7 @@ import re
 import heapq  
 from googletrans import Translator
 from nltk import word_tokenize,sent_tokenize
-linea = "\n-----------------------------------------------------------------------------------"
+
 #Leemos el texto
 archTexto = open('texto.txt','r',encoding="utf8")
 contenido  = archTexto.read()

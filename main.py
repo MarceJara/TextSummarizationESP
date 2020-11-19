@@ -1,3 +1,4 @@
+#Extractive Text Summarization 
 #Importamos los paquetes necesarios
 import nltk
 import re
@@ -12,13 +13,14 @@ archTexto.close()
 
 #Traducimos el texto ESP --> ENG
 translator = Translator()
-contenido_eng = translator.translate(str(contenido),dest="en", src="es")
+contenido_eng = translator.translate(contenido,dest='en',src='es')
 
 #Limpiamos el texto
-texto = re.sub(r'\[[0-9]*\]', ' ', contenido_eng.text) 
 texto = re.sub(r'\s+', ' ', contenido_eng.text)
-#texto = re.sub('[^a-zA-Z]', ' ',texto)
-texto = re.sub(r'\s+', ' ',texto)
+texto = re.sub('\n[a-z][.]',' ',texto) 
+texto = re.sub(r'\n',' ', texto) 
+texto = re.sub(r'\s+',' ',texto)
+
 
 #Realizamos la tokenización de palabras y oraciones
 listaDePalabras = word_tokenize(texto)
@@ -29,7 +31,7 @@ palabrasFrec = nltk.corpus.stopwords.words('english')
 
 #Creamos una lista con la frecuencia de las palabras en el texto
 frecPalabras = {}
-for i in nltk.word_tokenize(texto):
+for i in listaDePalabras:
     if i not in palabrasFrec:
         if i not in frecPalabras.keys():
             frecPalabras[i] = 1
@@ -43,7 +45,7 @@ frecMax = max(frecPalabras.values())
 for j in frecPalabras.keys():  
     frecPalabras[j] = (frecPalabras[j]/frecMax)
 
-#Calculamos las frases que más se repiten
+#Calculamos las oraciones que más se repiten
 puntajeOrac = {}  
 for sent in listaDeOraciones:  
     for word in nltk.word_tokenize(sent.lower()):
@@ -54,13 +56,13 @@ for sent in listaDeOraciones:
                 else:
                     puntajeOrac[sent] += frecPalabras[word]
 
-#Realizamos el resumen con las mejores frases
+#Realizamos el resumen con las mejores oraciones
 resumenOrac = heapq.nlargest(15, puntajeOrac, key=puntajeOrac.get)
 resumen = ' '.join(resumenOrac)  
 
 #Traducir el texto ENG --> ESP
 translator = Translator()
-textoRes = translator.translate(resumen,dest="es", src="en")
+textoRes = translator.translate(str(resumen),dest="es", src="en")
 #print(type(textoRes.text))
 
 archResumen = open('resumen.txt','w')

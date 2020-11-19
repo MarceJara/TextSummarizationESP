@@ -21,7 +21,6 @@ texto = re.sub('\n[a-z][.]',' ',texto)
 texto = re.sub(r'\n',' ', texto) 
 texto = re.sub(r'\s+',' ',texto)
 
-
 #Realizamos la tokenización de palabras y oraciones
 listaDePalabras = word_tokenize(texto)
 listaDeOraciones = sent_tokenize(texto)
